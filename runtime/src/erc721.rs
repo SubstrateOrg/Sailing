@@ -117,7 +117,7 @@ decl_module! {
 
 impl<T: Trait> Module<T> {
     // Start ERC721 : Internal Functions //
-    fn _exists(token_id: T::TokenIndex) -> bool {
+    pub fn _exists(token_id: T::TokenIndex) -> bool {
         return <TokenOwner<T>>::exists(token_id);
     }
 
@@ -129,7 +129,7 @@ impl<T: Trait> Module<T> {
 		Ok(token_id)
 	}
 
-    fn _is_approved_or_owner(spender: T::AccountId, token_id: T::TokenIndex) -> bool {
+    pub fn _is_approved_or_owner(spender: T::AccountId, token_id: T::TokenIndex) -> bool {
         let owner = Self::owner_of(token_id);
         let approved_user = Self::get_approved(token_id);
 
@@ -173,7 +173,7 @@ impl<T: Trait> Module<T> {
         Ok(())
     }
 
-    fn _burn(token_id: T::TokenIndex) -> Result {
+    pub fn _burn(token_id: T::TokenIndex) -> Result {
         let owner = match Self::owner_of(token_id) {
             Some(c) => c,
             None => return Err("No owner for this token"),
@@ -201,7 +201,7 @@ impl<T: Trait> Module<T> {
         Ok(())
     }
 
-    fn _transfer_from(from: T::AccountId, to: T::AccountId, token_id: T::TokenIndex) -> Result {
+    pub fn _transfer_from(from: T::AccountId, to: T::AccountId, token_id: T::TokenIndex) -> Result {
         let owner = match Self::owner_of(token_id) {
             Some(c) => c,
             None => return Err("No owner for this token"),
@@ -236,7 +236,7 @@ impl<T: Trait> Module<T> {
         Ok(())
     }
 
-    fn _clear_approval(token_id: T::TokenIndex) -> Result{
+    pub fn _clear_approval(token_id: T::TokenIndex) -> Result{
         <TokenApprovals<T>>::remove(token_id);
 
         Ok(())
@@ -244,7 +244,7 @@ impl<T: Trait> Module<T> {
     // End ERC721 : Internal Functions //
 
     // Start ERC721 : Enumerable : Internal Functions //
-    fn _add_token_to_owner_enumeration(to: T::AccountId, token_id: T::TokenIndex) -> Result {
+    pub fn _add_token_to_owner_enumeration(to: T::AccountId, token_id: T::TokenIndex) -> Result {
         let new_token_index = Self::balance_of(&to);
 
         <OwnedTokensIndex<T>>::insert(token_id, new_token_index);
@@ -253,7 +253,7 @@ impl<T: Trait> Module<T> {
         Ok(())
     }
 
-    fn _add_token_to_all_tokens_enumeration() -> Result {
+    pub fn _add_token_to_all_tokens_enumeration() -> Result {
         let total_supply = Self::total_supply();
 
         // Should never fail since overflow on user balance is checked before this
@@ -264,7 +264,7 @@ impl<T: Trait> Module<T> {
         Ok(())
     }
 
-    fn _remove_token_from_owner_enumeration(from: T::AccountId, token_id: T::TokenIndex) -> Result {
+    pub fn _remove_token_from_owner_enumeration(from: T::AccountId, token_id: T::TokenIndex) -> Result {
         let balance_of_from = Self::balance_of(&from);
 
         // Should never fail because same check happens before this call is made
@@ -288,7 +288,7 @@ impl<T: Trait> Module<T> {
         Ok(())
     }
 
-    fn _remove_token_from_all_tokens_enumeration() -> Result {
+    pub fn _remove_token_from_all_tokens_enumeration() -> Result {
         let total_supply = Self::total_supply();
 
         // Should never fail because balance of underflow is checked before this

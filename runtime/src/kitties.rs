@@ -104,7 +104,10 @@ decl_module! {
 
   			ensure!(<OwnedKitties<T>>::exists(&(sender.clone(), Some(kitty_id))), "Only owner can transfer kitty");
 
-			Self::do_transfer(&sender, &to, kitty_id);
+		    Self::do_transfer(&sender, &to, kitty_id);
+                    
+
+		//	<erc721::Module<T>>::_transfer_from(sender.clone(), to.clone(), <erc721::Module<T> as Trait>::TokenIndex::from(kitty_id))?;
 
 			Self::deposit_event(RawEvent::Transferred(sender, to, kitty_id));
 		}
@@ -409,3 +412,4 @@ mod tests {
 		});
 	}
 }
+
